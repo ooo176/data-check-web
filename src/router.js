@@ -6,7 +6,7 @@ import Table1 from './views/Table1'
 import HelloWorld from "./components/HelloWorld";
 import Login from "./views/Login";
 import Home from "./views/Home";
-
+import TodoList from "./views/todoList.vue";
 
 Vue.use(Router)
 
@@ -37,6 +37,11 @@ export default new Router({
             path: '/login',
             name: 'Login',
             component: Login,
+            hidden: true
+        }, {
+            path: '/todoList',
+            name: 'TodoList',
+            component: TodoList,
             hidden: true
         }, {
             path: '/home',
