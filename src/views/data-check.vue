@@ -22,6 +22,14 @@
                     prop="sql">
             </el-table-column>
         </el-table>
+        <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            layout="total, sizes, prev, pager, next, jumper"
+            :current-page="currentPage"
+            :page-sizes="[5,10, 20, 30]"
+            :total="total">
+        </el-pagination>
     </div>
 
 </template>
@@ -33,14 +41,15 @@
             handleClick(row) {
                 console.log(row);
             },
-            checkPersonArchive() {
+            listAllSql() {
                 this.loading = true;
-                this.postRequest('sql/check', '{"codeSystemId":"' + 2 + '"}"').then(resp => {
+                this.postRequest('sql/query', '{"pageNo":' + this.currentPage + ',"pageSize":' + this.pageSize + '}').then(resp => {
                     if (resp) {
                         this.loading = false;
                         console.log(resp.data)
                         this.tableData = resp.data;
                         this.warn = resp.msg;
+                        this.total =resp.total;
                     } else {
                         this.loading = false;
                         this.tableData = [];
@@ -48,21 +57,53 @@
                     }
                 })
             },
+            checkPersonArchive() {
+                this.loading = true;
+                this.postRequest('sql/check', '{"pageNo":' + this.currentPage + ',"pageSize":' + this.pageSize + '}').then(resp => {
+                    if (resp) {
+                        this.loading = false;
+                        console.log(resp.data)
+                        this.tableData = resp.data;
+                        this.warn = resp.msg;
+                        this.total =resp.total;
+                    } else {
+                        this.loading = false;
+                        this.tableData = [];
+                        this.warn = '接口请求异常！！';
+                    }
+                })
+            },
+            init(){
+                this.listAllSql();
+            },
             showAddDepView() {
-                console.log('here111')
                 this.tableData = [{
                     no: '1111',
                     desc: '人员档案未增加索引11',
                     sql: 'select * from person11'
                 }];
+            },
+            handleSizeChange(val) {
+                this.pageSize = val;
+                this.listAllSql();
+            },
+            handleCurrentChange(val) {
+                this.currentPage = val;
+                this.listAllSql();
             }
         },
         data() {
             return {
                 tableData: [],
                 loading: false,
-                warn: '添加工资账套'
+                warn: '添加工资账套',
+                currentPage: 1,
+                pageSize: 10,
+                total: 0
             }
+        },
+        created() {
+            this.init();
         }
     }
 </script>
