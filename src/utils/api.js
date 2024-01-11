@@ -56,11 +56,17 @@ export const putRequest = (url, params) => {
         data: params
     })
 }
-export const getRequest = (url, params) => {
+export const getRequest = (url, params, cookie) => {
     return axios({
+        withCredentials: true, // 确保浏览器携带cookie
         method: 'get',
         url: `${base}${url}`,
-        params: params
+        params: params,
+        headers: {
+            'Cookie': 'XSRF-TOKEN=ybFxPIk223jDmIvjLObhWA-h;' + cookie, // 将cookie添加到headers中
+            "Accept": " */*",
+            "Cache-Control": "no-cache",
+        }
     })
 }
 export const deleteRequest = (url, params) => {
@@ -70,3 +76,5 @@ export const deleteRequest = (url, params) => {
         params: params
     })
 }
+
+axios.defaults.withCredentials = true;

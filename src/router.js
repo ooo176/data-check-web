@@ -7,6 +7,7 @@ import HelloWorld from "./components/HelloWorld";
 import Login from "./views/Login";
 import Home from "./views/Home";
 import TodoList from "./views/todoList.vue";
+import weibo from "./views/weibo.vue";
 
 Vue.use(Router)
 
@@ -51,6 +52,11 @@ export default new Router({
             meta: {
                 roles: ['admin', 'user']
             }
+        }, {
+            path: '/weibo',
+            name: 'weibo',
+            component: weibo,
+            hidden: true
         },
         {
             path: '*',
