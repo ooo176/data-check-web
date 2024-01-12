@@ -56,16 +56,20 @@ export const putRequest = (url, params) => {
         data: params
     })
 }
-export const getRequest = (url, params, cookie) => {
+export const getRequest = (url, params) => {
     return axios({
         withCredentials: true, // 确保浏览器携带cookie
         method: 'get',
         url: `${base}${url}`,
         params: params,
         headers: {
-            'Cookie': 'XSRF-TOKEN=ybFxPIk223jDmIvjLObhWA-h;' + cookie, // 将cookie添加到headers中
+            // 'Cookie': 'XSRF-TOKEN=ybFxPIk223jDmIvjLObhWA-h;' + cookie, // 将cookie添加到headers中
             "Accept": " */*",
             "Cache-Control": "no-cache",
+            "Access-Control-Allow-Credentials": true,
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, PUT",
+            "Access-Control-Allow-Headers": "X-Custom-Header"
         }
     })
 }
