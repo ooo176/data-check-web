@@ -13,13 +13,17 @@
                     width="50">
             </el-table-column>
             <el-table-column
-                    label="描述"
-                    prop="desc"
-                    width="180">
+                    label="作者"
+                    prop="user.screen_name">
             </el-table-column>
             <el-table-column
-                    label="sql"
-                    prop="sql">
+                    label="内容"
+                    prop="text_raw">
+            </el-table-column>
+            <el-table-column
+                    :formatter="formatDate"
+                    label="创建日期"
+                    prop="created_at">
             </el-table-column>
         </el-table>
         <el-pagination
@@ -43,7 +47,7 @@
             },
             listAllSql() {
                 this.loading = true;
-                this.getRequest('https://weibo.com/ajax/statuses/likelist?uid=7327788896&page=1', '')
+                this.getRequest('weibo/query', '')
                     .then(resp => {
                         if (resp) {
                             console.log(resp.data);
@@ -90,6 +94,15 @@
             handleCurrentChange(val) {
                 this.currentPage = val;
                 this.listAllSql();
+            },
+            formatDate(row, column) {
+                console.log(column);
+                console.log("row");
+                console.log(row);
+                const date = new Date(row.created_at);
+                const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                const day = date.getDate().toString().padStart(2, '0');
+                return `${month}-${day}`;
             }
         },
         data() {
