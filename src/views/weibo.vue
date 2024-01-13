@@ -1,7 +1,6 @@
 <template>
     <div class="area">
-        <h2>数据</h2>
-        <el-button @click="() => checkPersonArchive()" type="primary">开始校验</el-button>
+        <h2>{{address}}</h2>
         <!--        <div class="warn"><span>{{ warn }}</span></div>-->
         <el-table
                 :data="tableData"
@@ -50,14 +49,23 @@
                 this.getRequest('weibo/query', '')
                     .then(resp => {
                         if (resp) {
-                            console.log(resp.data);
                             this.loading = false;
                             this.tableData = resp.data.list;
                         } else {
-                            console.log('接口请求异常！！');
                             this.loading = false;
                             this.tableData = [];
                             this.warn = '接口请求异常！！';
+                        }
+                    })
+            },
+            queryDetail() {
+                this.getRequest('weibo/detail', '')
+                    .then(resp => {
+                        if (resp) {
+                            console.log(resp.data);
+                            this.address = resp.data.ip_location;
+                        } else {
+                            console.log('接口请求异常！！');
                         }
                     })
             },
@@ -79,6 +87,7 @@
             },
             init() {
                 this.listAllSql();
+                this.queryDetail();
             },
             showAddDepView() {
                 this.tableData = [{
@@ -112,7 +121,8 @@
                 warn: '添加工资账套',
                 currentPage: 1,
                 pageSize: 10,
-                total: 0
+                total: 0,
+                address: '未知'
             }
         },
         created() {
